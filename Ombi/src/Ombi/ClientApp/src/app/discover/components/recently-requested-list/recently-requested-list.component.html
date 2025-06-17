@@ -1,0 +1,34 @@
+@defer (when requests()) {
+    <div *ngIf="requests().length > 0">
+        <p-carousel #carousel [value]="requests()" [numVisible]="3" [numScroll]="1"
+            [responsiveOptions]="responsiveOptions" [page]="0">
+            <ng-template let-result pTemplate="item">
+                <ombi-detailed-card
+                    [request]="result"
+                    [isAdmin]="isAdmin"
+                    (onClick)="navigate(result)"
+                    (onApprove)="approve(result)"
+                    (onDeny)="deny(result)">
+                </ombi-detailed-card>
+            </ng-template>
+        </p-carousel>
+    </div>
+}@placeholder(minimum 500) {
+    <div class="row loading-container">
+        <div class="col-2">
+            <p-skeleton width="100%" height="270px"></p-skeleton>
+        </div>
+        <div class="col-2">
+            <p-skeleton width="100%" height="270px"></p-skeleton>
+        </div>
+        <div class="col-2">
+            <p-skeleton width="100%" height="270px"></p-skeleton>
+        </div>
+        <div class="col-2">
+            <p-skeleton width="100%" height="270px"></p-skeleton>
+        </div>
+        <div class="col-2">
+            <p-skeleton width="100%" height="270px"></p-skeleton>
+        </div>
+    </div>
+}

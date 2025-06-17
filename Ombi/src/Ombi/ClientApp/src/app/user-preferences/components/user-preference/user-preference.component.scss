@@ -1,0 +1,36 @@
+.small-middle-container{
+    margin: auto;
+    margin-top: 3%;
+	width: 90%;
+}
+
+.profile-img {
+    width: 75px;
+    height: 75px; 
+    margin-right: 20px;
+    border-radius: 100%;
+}
+
+#usernameTitle {
+    margin: 0;
+    align-self: center;
+    overflow-wrap: anywhere;
+}
+
+.user-type-row {
+    padding-bottom: 1.25em;
+}
+
+.my-auto {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+::ng-deep .mat-tab-body-content {
+    height: 100%;
+    overflow: hidden !important;
+}
+
+.tab-content {
+    margin-top: 1.5em;
+}

@@ -1,0 +1,18 @@
+.small-middle-container{
+	margin: auto;
+	width: 85%;
+	margin-top:10px;
+}
+
+.code-block {
+	font-size: 12px;
+}
+
+::ng-deep .dark .code-block {
+	color:#FFF;
+}
+
+::ng-deep .code-block {
+	color:#FFF;
+	font-family: Menlo, Monaco, "Courier New", Courier, monospace;
+}

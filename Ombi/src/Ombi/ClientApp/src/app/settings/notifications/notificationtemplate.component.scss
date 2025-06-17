@@ -1,0 +1,30 @@
+﻿@import "./styles/shared.scss";
+
+.small-middle-container{
+	margin: auto;
+	width: 95%;
+	margin-top:10px;
+}
+
+.lmobile-actions{
+    display:flex;
+    justify-content: left;
+    align-items:flex-end;
+}
+
+.lmobile-actions .form-group{
+    margin-right:10px;
+}
+
+.lmobile-container{
+    display:flex;
+    margin-top:10px;
+}
+
+.issue-content{
+    justify-content: flex-end;
+}
+
+.mat-raised-button{
+    margin-right:10px;
+}

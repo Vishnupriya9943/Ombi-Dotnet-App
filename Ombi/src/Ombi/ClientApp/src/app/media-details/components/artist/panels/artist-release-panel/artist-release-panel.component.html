@@ -1,0 +1,28 @@
+
+
+      
+        <mat-card class="example-card">
+          <mat-card-header>
+            <mat-card-title>
+              {{'MediaDetails.AlbumsTitle' | translate}}
+            </mat-card-title>
+          </mat-card-header>
+         
+          <mat-card-content>
+            <div class="row card-spacer">
+
+              <span *ngFor="let r of albums">
+              <div class="col-md-2 album-poster" >
+                <div  class="sidebar affixable affix-top preview-poster">
+                  <div class="poster" [class.monitored]="r.monitored || r.requested" [class.available]="r.available" [class.selected]="r.selected">
+                      <img class="real grow" matTooltip="{{r.title}}" (click)="selectAlbum(r)"
+                        src="{{r.image ? r.image : 'images/default-music-placeholder.png'}}" alt="Poster"
+                        style="display: block;">
+                  </div>
+                </div>
+  
+              </div>
+            </span>
+            </div>
+          </mat-card-content>
+        </mat-card>

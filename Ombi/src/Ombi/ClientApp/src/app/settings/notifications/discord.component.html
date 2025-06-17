@@ -1,0 +1,67 @@
+﻿<settings-menu></settings-menu>
+<div *ngIf="form" class="small-middle-container">
+    <fieldset class="top-space">
+        <legend>Discord Notifications</legend>
+        <div class="row">
+            <div class="col-md-8">
+                <form novalidate [formGroup]="form" (ngSubmit)="onSubmit(form)">
+                    <div class="row">
+                        <div class="col-md-12 col-12 col-sm-12">
+                            <div>
+                                <div class="md-form-field">
+                                    <mat-slide-toggle formControlName="enabled" id="enable">Enable</mat-slide-toggle>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="md-form-field">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Webhook Url</mat-label>
+                                <input matInput formControlName="webhookUrl">
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Username</mat-label>
+                                <input matInput formControlName="username">
+                            </mat-form-field>
+                                <mat-slide-toggle matTooltip="This when enabled will not show the user who did the action e.g. Requested a new movie" formControlName="hideUser">Hide Users in notification</mat-slide-toggle>
+   
+                        </div>
+                        <div class="md-form-field">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Icon</mat-label>
+                                <input matInput formControlName="icon">
+                            </mat-form-field>
+                            <div>
+                                <img [src]="form.value.icon" style="width: 300px" />
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row top-space">
+
+                        <div class="form-group">
+                            <div>
+                                <button mat-raised-button type="button" class="btn-spacing" color="accent"
+                                    (click)="test(form)" [disabled]="form.invalid">Test <div id="spinner"></div>
+                                    </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div>
+                                <button mat-raised-button type="submit" class="btn-spacing" color="primary"
+                                    [disabled]="form.invalid">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="col-md-4">
+                <notification-templates [templates]="templates" [showSubject]="false"></notification-templates>
+            </div>
+        </div>
+    </fieldset>
+</div>

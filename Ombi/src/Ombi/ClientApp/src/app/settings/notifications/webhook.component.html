@@ -1,0 +1,44 @@
+﻿
+<settings-menu></settings-menu>
+<div *ngIf="form" class="small-middle-container">
+    <fieldset>
+        <legend>Webhook Notifications</legend>
+        <div class="col-md-6">
+            <form novalidate [formGroup]="form" (ngSubmit)="onSubmit(form)">
+
+                <div class="form-group">
+                    <mat-checkbox id="enable" formControlName="enabled">Enabled</mat-checkbox>
+                </div>
+
+                <div class="form-group">
+                    <mat-form-field>
+                        <mat-label>Base URL</mat-label>
+                        <input matInput type="text" id="webhookUrl" name="webhookUrl" [ngClass]="{'form-error': form.get('webhookUrl').hasError('required')}" formControlName="webhookUrl" pTooltip="Enter the URL of your webhook server.">
+                    </mat-form-field>
+                </div>
+
+                <div class="form-group">
+                    <mat-form-field>
+                        <mat-label>Application Token</mat-label>
+                          <input matInput type="text" id="applicationToken" name="applicationToken" [ngClass]="{'form-error': form.get('applicationToken').hasError('required')}" formControlName="applicationToken" pTooltip="Optional authentication token. Will be sent as 'Access-Token' header.">
+                    </mat-form-field>
+                </div>
+
+                <div class="form-group">
+                    <div>
+                        <button [disabled]="form.invalid" mat-raised-button type="button" (click)="test(form)">
+                            Test
+                            <div id="spinner"></div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div>
+                        <button [disabled]="form.invalid" mat-raised-button type="submit" id="save">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </fieldset>
+</div>

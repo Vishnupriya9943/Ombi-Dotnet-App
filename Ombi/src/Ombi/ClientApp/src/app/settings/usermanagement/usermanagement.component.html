@@ -1,0 +1,133 @@
+﻿<settings-menu></settings-menu>
+<div class="small-middle-container">
+<wiki></wiki>
+<fieldset *ngIf="settings">
+    <legend>User Importer Settings</legend>
+    <div class="md-form-field" style="margin-top:1em;"></div>
+    <div class="col-md-6">
+        <div *ngIf="plexEnabled">
+
+            <div class="form-group">
+                <div>
+                    <mat-slide-toggle id="importPlex" [(ngModel)]="settings.importPlexUsers">
+                    Import Plex Users</mat-slide-toggle>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <mat-slide-toggle id="importAdmin" [(ngModel)]="settings.importPlexAdmin">Import Plex Admin</mat-slide-toggle>
+                </div>
+
+            <div *ngIf="settings.importPlexUsers || settings.importPlexAdmin">
+              <mat-slide-toggle id="cleanupPlexUsers" [(ngModel)]="settings.cleanupPlexUsers">
+                Cleanup Plex Users</mat-slide-toggle>
+            </div>
+            <div *ngIf="plexUsers">
+                <p>Plex Users excluded from Import</p>
+
+                <p-autoComplete [(ngModel)]="bannedPlexUsers" [suggestions]="filteredPlexUsers" [multiple]="true" field="username" (completeMethod)="filterPlexList($event)"></p-autoComplete>
+            </div>
+        </div>
+        <div *ngIf="embyEnabled">
+            <div class="form-group">
+                <mat-slide-toggle id="importEmbyUsers" [(ngModel)]="settings.importEmbyUsers">Import Emby Users</mat-slide-toggle>
+            </div>
+
+            <div *ngIf="embyUsers">
+                <p>Emby Users excluded from Import</p>
+
+                <p-autoComplete [(ngModel)]="bannedEmbyUsers" [suggestions]="filteredEmbyUsers" [multiple]="true" field="username" (completeMethod)="filterEmbyList($event)"></p-autoComplete>
+            </div>
+
+        </div>
+        <div *ngIf="jellyfinEnabled">
+            <div class="form-group">
+                <mat-slide-toggle id="importJellyfinUsers" [(ngModel)]="settings.importJellyfinUsers">Import Jellyfin Users</mat-slide-toggle>
+            </div>
+
+            <div *ngIf="jellyfinUsers">
+                <p>Jellyfin Users excluded from Import</p>
+
+                <p-autoComplete [(ngModel)]="bannedJellyfinUsers" [suggestions]="filteredJellyfinUsers" [multiple]="true" field="username" (completeMethod)="filterJellyfinList($event)"></p-autoComplete>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <h3>Default Roles</h3>
+        <mat-divider />
+        <div *ngFor="let c of claims">
+            <div class="form-group">
+                <div>
+                    <mat-slide-toggle [(ngModel)]="c.enabled" [value]="c.value" id="create{{c.value}}" [attr.name]="'create' + c.value" ng-checked="c.enabled">
+                    {{c.value | humanize}}</mat-slide-toggle>
+                </div>
+            </div>
+        </div>
+
+        <h3>Default Request Limits</h3>
+
+        <mat-divider />
+
+        <div class="form-group">
+            <mat-form-field>
+                <mat-label>Movie Request Limit</mat-label>
+                <input matInput type="text" [(ngModel)]="settings.movieRequestLimit" id="movieRequestLimit" name="movieRequestLimit" value="{{settings?.movieRequestLimit}}">
+            </mat-form-field>
+        </div>
+
+        <mat-label>Movie Request Limit Type</mat-label>
+        <mat-select  id="movieRequestLimitType" [(value)]="settings.movieRequestLimitType">
+        <mat-option *ngFor="let value of requestLimitTypes" [value]="value">
+            {{RequestLimitType[value]}}
+        </mat-option>
+        </mat-select>
+
+        <div class="form-group">
+            <mat-form-field>
+                <mat-label>Episode Request Limit</mat-label>
+                <input matInput type="text" [(ngModel)]="settings.episodeRequestLimit" id="episodeRequestLimit" name="episodeRequestLimit" value="{{settings?.episodeRequestLimit}}">
+            </mat-form-field>
+        </div>
+
+        <mat-label>Episode Request Limit Type</mat-label>
+        <mat-select  id="episodeRequestLimitType" [(value)]="settings.episodeRequestLimitType">
+        <mat-option *ngFor="let value of requestLimitTypes" [value]="value">
+            {{RequestLimitType[value]}}
+        </mat-option>
+        </mat-select>
+
+        <div class="form-group">
+            <mat-form-field>
+                <mat-label>Music Request Limit</mat-label>
+                <input matInput type="text" [(ngModel)]="settings.musicRequestLimit" id="musicRequestLimit" name="musicRequestLimit" value="{{settings?.musicRequestLimit}}">
+            </mat-form-field>
+        </div>
+        <mat-label>Music Request Limit Type</mat-label>
+        <mat-select  id="musicRequestLimitType" [(value)]="settings.musicRequestLimitType">
+        <mat-option *ngFor="let value of requestLimitTypes" [value]="value">
+            {{RequestLimitType[value]}}
+        </mat-option>
+        </mat-select>
+
+        <mat-form-field>
+            <mat-label [translate]="'UserPreferences.StreamingCountry'"></mat-label>
+            <mat-select [(value)]="settings.defaultStreamingCountry">
+              <mat-option *ngFor="let value of countries" [value]="value">
+                {{value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+    </div>
+        <div class="form-group">
+            <button (click)="submit()" mat-raised-button type="submit" id="save" class="mat-focus-indicator mat-stroked-button accent mat-accent mat-raised-button mat-button-base" ng-reflect-disabled="false">
+            <span class="mat-button-wrapper">Submit</span><div matripple="" class="mat-ripple mat-button-ripple" ng-reflect-disabled="false" ng-reflect-centered="false" ng-reflect-trigger="[object HTMLButtonElement]"></div>
+            <div class="mat-button-focus-overlay"></div></button>
+        </div>
+        <div><button type="button" [disabled]="!enableImportButton" (click)="runImporter()" class="mat-focus-indicator mat-stroked-button mat-raised-button mat-button-base">
+            Run Importer<div matripple class="mat-ripple mat-button-ripple" ng-reflect-disabled="false" ng-reflect-centered="false" ng-reflect-trigger="[object HTMLButtonElement]"></div><div class="mat-button-focus-overlay"></div></button>
+        </div>
+        <div class="md-form-field" style="margin-top:1em;"></div>
+</fieldset>
+</div>

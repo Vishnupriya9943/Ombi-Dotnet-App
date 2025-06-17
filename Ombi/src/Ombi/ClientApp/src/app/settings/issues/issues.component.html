@@ -1,0 +1,76 @@
+﻿<settings-menu></settings-menu>
+<div class="small-middle-container">
+<wiki></wiki>
+
+<fieldset>
+    <legend>Issues</legend>
+    <div class="md-form-field" style="margin-top:1em;"></div>
+    <form *ngIf="form" novalidate [formGroup]="form" (ngSubmit)="onSubmit(form)">
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="checkbox">
+                    <mat-slide-toggle id="enable" formControlName="enabled" ng-checked="form.enabled">
+                    Enable</mat-slide-toggle>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <mat-slide-toggle id="enableInProgress" formControlName="enableInProgress" ng-checked="form.enableInProgress">
+                    Enable In Progress State</mat-slide-toggle>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox">
+                    <mat-slide-toggle id="deleteIssues" formControlName="deleteIssues" ng-checked="form.deleteIssues">
+                    Delete issues after they have been resolved</mat-slide-toggle>
+                </div>
+            </div>
+
+            <div class="form-group" *ngIf="form.controls.deleteIssues.value">
+                <label for="daysAfterResolvedToDelete" class="control-label">Leave the resolved issue for X amount of
+                    days before deletion</label>
+                <input type="number" class="form-control form-control-custom form-small" min="1" max="365" id="daysAfterResolvedToDelete"
+                    formControlName="daysAfterResolvedToDelete" ng-checked="form.daysAfterResolvedToDelete">
+            </div>
+
+
+            <div class="md-form-field">
+                <div>
+                    <button mat-raised-button type="submit" color="primary" [disabled]="form.invalid" class="mat-focus-indicator mat-stroked-button accent mat-accent mat-raised-button mat-button-base" ng-reflect-disabled="false">
+                        <span class="mat-button-wrapper">Submit</span><div matripple="" class="mat-ripple mat-button-ripple" ng-reflect-disabled="false" ng-reflect-centered="false" ng-reflect-trigger="[object HTMLButtonElement]"></div>
+                        <div class="mat-button-focus-overlay"></div></button><div class="md-form-field" style="margin-top:1em;"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="col-md-6">
+        <div *ngIf="categories">
+            <div class="form-group row">
+                <div class="col-md-9">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Add Category</mat-label>
+                        <input matInput type="text" [(ngModel)]="categoryToAdd.value" id="categoryToAdd" name="categoryToAdd" value="{{categoryToAdd.value}}">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <button mat-raised-button (click)="addCategory()">Add</button>
+                </div>
+            </div>
+
+            <div class="row categoryResults">
+                <legend>Categories:</legend>
+                <div *ngFor="let cat of categories">
+                    <div class="col-md-9">
+                        {{cat.value}}
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-sm btn-danger-outline" (click)="deleteCategory(cat.id)">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+</div>

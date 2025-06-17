@@ -1,0 +1,214 @@
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { Component, OnInit } from "@angular/core";
+import { IMultiSearchResult, ISearchMovieResult, RequestType } from "../../../interfaces";
+
+import { AdvancedSearchDialogDataService } from "../../../shared/advanced-search-dialog/advanced-search-dialog-data.service";
+import { AuthService } from "../../../auth/auth.service";
+import { FilterService } from "../../services/filter-service";
+import { IDiscoverCardResult } from "../../interfaces";
+import { SearchFilter } from "../../../my-nav/SearchFilter";
+import { SearchV2Service } from "../../../services";
+import { StorageService } from "../../../shared/storage/storage-service";
+import { isEqual } from "lodash";
+import { FeaturesFacade } from "../../../state/features/features.facade";
+
+@Component({
+    templateUrl: "./search-results.component.html",
+    styleUrls: ["../discover/discover.component.scss"],
+})
+export class DiscoverSearchResultsComponent implements OnInit {
+
+    public loadingFlag: boolean;
+    public searchTerm: string;
+    public results: IMultiSearchResult[];
+    public isAdmin: boolean;
+    public is4kEnabled = false;
+
+    public discoverResults: IDiscoverCardResult[] = [];
+
+    public filter: SearchFilter;
+
+    private isAdvancedSearch: boolean;
+    private loadPosition: number = 30;
+
+    constructor(private searchService: SearchV2Service,
+        private route: ActivatedRoute,
+        private filterService: FilterService,
+        private router: Router,
+        private advancedDataService: AdvancedSearchDialogDataService,
+        private store: StorageService,
+        private authService: AuthService,
+        private featureFacade: FeaturesFacade) {
+        this.route.params.subscribe((params: any) => {
+            this.isAdvancedSearch = this.router.url === '/discover/advanced/search';
+            if (this.isAdvancedSearch) {
+                this.loadAdvancedData();
+                return;
+            }
+            this.searchTerm = params.searchTerm;
+            this.clear();
+            this.init();
+        });
+
+        this.advancedDataService.onDataChange.subscribe(() => {
+            this.clear();
+            this.loadAdvancedData();
+        });
+    }
+
+    public async ngOnInit() {
+        this.is4kEnabled = this.featureFacade.is4kEnabled();
+        this.isAdmin = this.authService.isAdmin();
+        this.filterService.onFilterChange.subscribe(async x => {
+            if (!isEqual(this.filter, x)) {
+                this.filter = { ...x };
+                await this.search();
+            }
+        });
+
+        if (this.isAdvancedSearch) {
+            return;
+        }
+        this.loadingFlag = true;
+    }
+
+    public async init() {
+        var filter = this.store.get("searchFilter");
+        if (filter) {
+            this.filter = Object.assign(new SearchFilter(), JSON.parse(filter));
+        } else {
+            this.filter = new SearchFilter({ movies: true, tvShows: true, people: false, music: false });
+        }
+        this.loading();
+        await this.search();
+    }
+
+    private createInitialModel() {
+        this.results.forEach(m => {
+
+            let mediaType = RequestType.movie;
+            if (m.mediaType == "movie") {
+                mediaType = RequestType.movie;
+            } else if (m.mediaType == "tv") {
+                mediaType = RequestType.tvShow;
+            } else if (m.mediaType == "Artist") {
+                mediaType = RequestType.album;
+            }
+
+            let poster = `https://image.tmdb.org/t/p/w300/${m.poster}`;
+            if (!m.poster) {
+                if (mediaType === RequestType.movie) {
+                    poster = "images/default_movie_poster.png"
+                }
+                if (mediaType === RequestType.tvShow) {
+                    poster = "images/default_tv_poster.png"
+                }
+            }
+
+            this.discoverResults.push({
+                posterPath: mediaType !== RequestType.album ? poster : "images/default-music-placeholder.png",
+                requested: false,
+                title: m.title,
+                type: mediaType,
+                id: m.id,
+                url: "",
+                rating: 0,
+                overview: m.overview,
+                approved: false,
+                imdbid: "",
+                denied: false,
+                background: "",
+                available: false,
+                tvMovieDb: mediaType === RequestType.tvShow ? true : false
+            });
+        });
+        this.finishLoading();
+    }
+
+    private loading() {
+        this.loadingFlag = true;
+    }
+
+    private finishLoading() {
+        this.loadingFlag = false;
+    }
+
+    private clear() {
+        this.results = [];
+        this.discoverResults = [];
+    }
+
+    private loadAdvancedData() {
+        const advancedData = this.advancedDataService.getData();
+        this.mapAdvancedData(advancedData);
+        return;
+    }
+
+    public mapAdvancedData(advancedData: ISearchMovieResult[]) {
+        this.finishLoading();
+        const type = this.advancedDataService.getType();
+        advancedData.forEach(m => {
+
+            let mediaType = type;
+
+            let poster = `https://image.tmdb.org/t/p/w300/${m.posterPath}`;
+            if (!m.posterPath) {
+                if (mediaType === RequestType.movie) {
+                    poster = "images/default_movie_poster.png"
+                }
+                if (mediaType === RequestType.tvShow) {
+                    poster = "images/default_tv_poster.png"
+                }
+            }
+
+            this.discoverResults.push({
+                posterPath:  poster,
+                requested: false,
+                title: m.title,
+                type: mediaType,
+                id: m.id,
+                url: "",
+                rating: 0,
+                overview: m.overview,
+                approved: false,
+                imdbid: "",
+                denied: false,
+                background: "",
+                available: false,
+                tvMovieDb: false
+            });
+        });
+    }
+
+    public onScroll() {
+        console.log("scrolled");
+        if (this.advancedDataService) {
+            this.loadMoreAdvancedSearch();
+            return;
+        }
+    }
+
+    private loadMoreAdvancedSearch() {
+        const advancedOptions = this.advancedDataService.getOptions();
+
+        this.searchService.advancedSearch({
+            type: advancedOptions.type == RequestType.movie ? "movie" : "tv",
+            companies: advancedOptions.companies,
+            genreIds: advancedOptions.genres,
+            keywordIds : advancedOptions.keywords,
+            releaseYear: advancedOptions.releaseYear,
+            watchProviders: advancedOptions.watchProviders,
+        }, this.loadPosition, 30).then(x => {
+
+            this.loadPosition += 30;
+            this.mapAdvancedData(x);
+        });
+    }
+
+    private async search() {
+        this.clear();
+        this.results = await this.searchService
+            .multiSearch(this.searchTerm, this.filter).toPromise();
+        this.createInitialModel();
+    }
+}

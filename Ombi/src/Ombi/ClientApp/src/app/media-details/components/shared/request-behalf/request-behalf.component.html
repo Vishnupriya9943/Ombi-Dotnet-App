@@ -1,0 +1,25 @@
+<h1 mat-dialog-title>{{ 'MediaDetails.RequestOnBehalf' | translate}}</h1>
+<div mat-dialog-content>
+  <form class="example-form">
+    <mat-form-field class="example-full-width" appearance="outline" floatLabel=auto>
+      <mat-label>{{ 'MediaDetails.PleaseSelectUser' | translate}}</mat-label>
+      <input type="text"
+             aria-label="Number"
+             matInput
+             [formControl]="myControl"
+             [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+          {{displayFn(option)}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+</div>
+
+
+<div mat-dialog-actions class="right-buttons">
+  <button mat-raised-button (click)="onNoClick()" color="warn"><i class="fas fa-times"></i> {{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button (click)="request()" color="accent" [mat-dialog-close]="userId" cdkFocusInitial><i class="fas fa-plus"></i> {{'Common.Request' | translate}}</button>
+</div>
+

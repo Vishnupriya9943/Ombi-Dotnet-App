@@ -1,0 +1,92 @@
+﻿<settings-menu></settings-menu>
+
+<wiki></wiki>
+<div *ngIf="settings" class="small-middle-container">
+    <fieldset>
+        <legend>Newsletter</legend>
+        <div class="col-md-6">
+
+                <div class="form-group">
+                    <div class="checkbox">
+                        <mat-slide-toggle  type="checkbox" id="enabled" [(ngModel)]="settings.enabled"  ng-checked="settings.enabled">Enable</mat-slide-toggle>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox">
+                        <mat-slide-toggle  type="checkbox" id="disableTv" [(ngModel)]="settings.disableTv"  ng-checked="settings.disableTv">Disable TV</mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <mat-slide-toggle  type="checkbox" id="disableMovies" [(ngModel)]="settings.disableMovies"  ng-checked="settings.disableMovies">Disable Movies</mat-slide-toggle>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox">
+                        <mat-slide-toggle  type="checkbox" id="disableMusic" [(ngModel)]="settings.disableMusic"  ng-checked="settings.disableMusic">Disable Music</mat-slide-toggle>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <mat-form-field appearance="outline" floatLabel=auto>
+                        <mat-label>Subject</mat-label>
+                        <input matInput id="subject" name="subject"
+                        [(ngModel)]="settings.notificationTemplate.subject" value="{{settings.notificationTemplate.subject}}">
+                    </mat-form-field>
+                </div>
+
+                <div class="form-group">
+                    <mat-form-field appearance="outline" floatLabel=auto>
+                        <mat-label>Message</mat-label>
+                        <textarea matInput id="message" name="message"
+                        [(ngModel)]="settings.notificationTemplate.message" value="{{settings.notificationTemplate.message}}"> </textarea>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-group">
+                    <div>
+                        <button mat-raised-button type="submit" id="save" (click)="onSubmit()">Submit</button>
+                        <button mat-raised-button type="button" (click)="test()">Test</button>
+                        <button mat-raised-button type="button" (click)="updateDatabase()"tooltipPosition="top" matTooltip="I recommend running this with a fresh Ombi install, this will set all the current *found* content to have been sent via Newsletter,
+                        if you do not do this then everything that Ombi has found in your libraries will go out on the first email!">Update Database</button>
+                        <button mat-raised-button type="button" (click)="trigger()">Trigger now</button>
+                    </div>
+                                 </div>
+        </div>
+
+
+        <div class="col-md-6">
+            <small>NOTE: Please see the tooltip on the Update Database button - Please see the wiki for more information</small>
+            <br/>
+            <br/>
+            <small>When testing, the test newsletter will go to all users that have the Admin role, please ensure that there are valid email addresses for this. The test will also only grab the latest 10 movies and 10 shows just to give you an example.</small>
+
+            <br/>
+            <br/>
+            <div class="form-group row">
+                <div class="col-md-9">
+                    <mat-form-field appearance="outline" floatLabel=auto>
+                        <mat-label>Add External Email (For users that are not in Ombi)</mat-label>
+                        <input matInput id="emailToAdd" name="emailToAdd"
+                        [(ngModel)]="emailToAdd" value="{{emailToAdd}}">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <button mat-raised-button (click)="addEmail()" matTooltip="Don't forget to press the Submit button!">Add</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div *ngFor="let email of settings.externalEmails">
+                    <div class="col-md-9">
+                        {{email}}
+                    </div>
+                    <div class="col-md-3">
+                        <button mat-raised-button (click)="deleteEmail(email)">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>

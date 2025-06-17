@@ -1,0 +1,25 @@
+﻿<wiki></wiki>
+<br><br>
+
+<mat-accordion>
+    <mat-expansion-panel *ngFor="let template of templates">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                {{NotificationType[template.notificationType] | humanize}}
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div>
+            <mat-slide-toggle [(ngModel)]="template.enabled">Enable</mat-slide-toggle>
+        </div>
+
+        <mat-form-field *ngIf="showSubject">
+            <input matInput placeholder="Subject" [(ngModel)]="template.subject">
+        </mat-form-field>
+
+        <mat-form-field>
+            <textarea matInput placeholder="Message" [(ngModel)]="template.message"></textarea>
+        </mat-form-field>
+    </mat-expansion-panel>
+
+</mat-accordion>

@@ -1,0 +1,53 @@
+﻿<div *ngIf="landingPageSettings && customizationSettings" style="overflow: auto !important;">
+    <ombi-image-background></ombi-image-background>
+
+    <div class="small-middle-container">
+        <div class="row">
+            <div class="col-md-push-3 col-md-6 logo-container">
+                <div *ngIf="customizationSettings.logo">
+                    <img class="logo-img" [src]="customizationSettings.logo"/>
+                </div>
+                <div *ngIf="!customizationSettings.logo && customizationSettings.applicationName" class="logo">
+                    {{customizationSettings.applicationName}}
+                </div>
+                <div *ngIf="!customizationSettings.logo && !customizationSettings.applicationName" class="logo">
+                    OMBI
+                </div>
+            </div>
+            <div class="col-md-4 col-md-push-3 vcenter">
+                <div *ngIf="landingPageSettings.noticeEnabled">
+                    <h3><i class="far fa-bell"></i>&nbsp;<b>Notice</b></h3>
+                    <span [innerHtml]="landingPageSettings.noticeText"></span>
+                </div>
+                <br>
+                <div *ngIf="!mediaServerStatus">
+                    <i class="fas fa-spinner fa-spin fa-3x fa-fw"></i>
+                </div>
+                <div *ngIf="mediaServerStatus">
+                    <div *ngIf="mediaServerStatus.fullyAvailable">
+                        <h3 class="online"><i class="fas fa-check-circle "></i> {{ 'LandingPage.OnlineHeading' | translate }}</h3>
+                        <span [translate]="'LandingPage.OnlineParagraph'"></span>
+                        <p [translate]="'LandingPage.CheckPageForUpdates'"></p>
+                    </div>
+                    <div *ngIf="mediaServerStatus.partiallyDown">
+                        <h3 class="partial"><i class="fas fa-exclamation-triangle "></i> {{ 'LandingPage.PartiallyOnlineHeading' | translate }}</h3>
+                        <span [translate]="'LandingPage.PartiallyOnlineParagraph'"></span>
+                        <p *ngIf="mediaServerStatus.serversUnavailable > 1" [translate]="'LandingPage.MultipleServersUnavailable'" [translateParams]="{serversUnavailable: mediaServerStatus.serversUnavailable, totalServers: mediaServerStatus.totalServers}"></p>
+                        <p *ngIf="mediaServerStatus.serversUnavailable == 1" [translate]="'LandingPage.SingleServerUnavailable'" [translateParams]="{serversUnavailable: mediaServerStatus.serversUnavailable, totalServers: mediaServerStatus.totalServers}">There is {{mediaServerStatus.serversUnavailable}} server offline out of {{mediaServerStatus.totalServers}}.</p>
+                        <p [translate]="'LandingPage.CheckPageForUpdates'"></p>
+                    </div>
+
+                    <div *ngIf="mediaServerStatus.completelyDown">
+                        <h3 class="offline"><i class="fas fa-times "></i> {{ 'LandingPage.OfflineHeading' | translate }}</h3>
+                        <span [translate]="'LandingPage.OfflineParagraph'"></span>
+                        <p [translate]="'LandingPage.CheckPageForUpdates'"></p>
+                    </div>
+                    <div class="button-continue">
+                        <button id="continue" mat-raised-button [routerLink]="['/login', 'true']" color="accent" type="submit" data-cy="continue">{{ 'Common.ContinueButton' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

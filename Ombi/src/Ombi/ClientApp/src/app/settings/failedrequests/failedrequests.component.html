@@ -1,0 +1,36 @@
+﻿
+<settings-menu></settings-menu>
+
+<div class="small-middle-container">
+  <table mat-table [dataSource]="vm">
+
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef>Title</th>
+      <td mat-cell *matCellDef="let v">{{v.title}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>Type</th>
+      <td mat-cell *matCellDef="let v">{{RequestType[v.type] | humanize}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="retryCount">
+      <th mat-header-cell *matHeaderCellDef>Retry Count</th>
+      <td mat-cell *matCellDef="let v">{{v.retryCount}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="errorDescription">
+      <th mat-header-cell *matHeaderCellDef>Error Description</th>
+      <td mat-cell *matCellDef="let v"><i [pTooltip]="v.error" class="fas fa-info-circle"></i></td>
+    </ng-container>
+
+    <ng-container matColumnDef="deleteBtn">
+      <th mat-header-cell *matHeaderCellDef>Delete</th>
+      <td mat-cell *matCellDef="let v"><button mat-raised-button color="warn" (click)="remove(v)">Remove</button></td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
+
+  </table>
+</div>

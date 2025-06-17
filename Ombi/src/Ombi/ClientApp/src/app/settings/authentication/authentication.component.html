@@ -1,0 +1,58 @@
+<settings-menu></settings-menu>
+<div class="small-middle-container">
+<wiki></wiki>
+<fieldset *ngIf="form">
+    <legend>Authentication</legend>
+    <div class="md-form-field" style="margin-top:1em;"></div>
+    <form novalidate [formGroup]="form" (ngSubmit)="onSubmit(form)">
+      <div class="form-group">
+        <div class="checkbox">
+          <mat-slide-toggle id="allowNoPassword" name="allowNoPassword" formControlName="allowNoPassword">
+            Allow users to login without a password
+          </mat-slide-toggle>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="checkbox">
+          <mat-slide-toggle id="enableOAuth" name="enableOAuth" formControlName="enableOAuth">Enable Plex OAuth</mat-slide-toggle>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="checkbox">
+          <mat-slide-toggle id="enableHeaderAuth" name="enableHeaderAuth" formControlName="enableHeaderAuth">Enable Authentication with Header Variable</mat-slide-toggle>
+        </div>
+        <div class="alert warning-box">
+          Enabling Header Authentication will allow anyone to bypass authentication unless you are using a properly configured reverse proxy. Use with caution!
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="form.controls.enableHeaderAuth.value">
+        <label for="headerAuthVariable" class="control-label">Header Authentication Variable</label>
+        <div>
+          <input type="text" class="form-control form-control-custom " id="headerAuthVariable" name="headerAuthVariable" formControlName="headerAuthVariable">
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="form.controls.enableHeaderAuth.value">
+        <div class="checkbox">
+          <mat-slide-toggle id="headerAuthCreateUser" name="headerAuthCreateUser" formControlName="headerAuthCreateUser">SSO creates new users automatically</mat-slide-toggle>
+        </div>
+        <div class="alert warning-box" *ngIf="form.controls.headerAuthCreateUser.value">
+          If the user in the Header Authentication variable does not exist, a new user will be created. You can configure the default permissions for new users in the <a target="_blank" href="/Settings/UserManagement">User Management settings</a>.
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <div>
+          <button mat-raised-button type="submit" color="primary" [disabled]="form.invalid" class="mat-focus-indicator mat-stroked-button accent mat-accent mat-raised-button mat-button-base" ng-reflect-disabled="false">
+            <span class="mat-button-wrapper">Submit</span><div matripple="" class="mat-ripple mat-button-ripple" ng-reflect-disabled="false" ng-reflect-centered="false" ng-reflect-trigger="[object HTMLButtonElement]"></div>
+            <div class="mat-button-focus-overlay"></div>
+          </button><div class="md-form-field" style="margin-top:1em;"></div>
+        </div>
+      </div>
+    </form>
+</fieldset>
+</div>

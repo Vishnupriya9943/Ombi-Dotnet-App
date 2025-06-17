@@ -1,0 +1,92 @@
+@import "./styles/variables.scss";
+.small-middle-container{
+        height:100vh;
+        overflow: auto; /* or overflow: auto; */
+    }
+
+.row{
+    overflow: auto; /* or overflow: auto; */
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    height:100vh;
+}
+
+@media only screen and (max-width: 992px) {
+    div.centered {
+        max-height: 100%;
+        overflow-y: auto;
+        width: 100%;
+        padding: 50% 12.5%;
+    }
+}
+
+div.centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+.online{
+    color:lightgreen;
+}
+
+
+.partial {
+    color: #ffd800
+}
+
+.offline {
+    color: #F44336
+}
+
+p {
+    font-size: 14px !important;
+}
+
+span, b, i, p {
+    color:white !important;
+}
+
+::ng-deep body {
+    background-color:#303030 !important;
+}
+
+.logo{
+    font:700 6em 'Montserrat', sans-serif;
+    text-align:center;
+    text-transform: uppercase;
+    color: $ombi-active;
+    padding:40px 20px;
+    white-space: normal;
+}
+
+@media (max-width: 1000px) {
+    .logo{
+        font:700 5em 'Montserrat', sans-serif;
+    }
+}
+
+@media (max-width: 800px) {
+    .logo{
+        font:700 4em 'Montserrat', sans-serif;
+    }
+}
+
+@media (max-width: 767px) {
+    .vcenter{
+        text-align:center;
+    }
+}
+
+.logo-img{
+    max-width:420px;
+    max-height:420px;
+}
+
+.logo-container{
+    display:flex;
+    justify-content: center;
+}
