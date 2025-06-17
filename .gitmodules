@@ -1,0 +1,3 @@
+[submodule "Ombi"]
+	path = Ombi
+	url = https://github.com/Ombi-app/Ombi.git
